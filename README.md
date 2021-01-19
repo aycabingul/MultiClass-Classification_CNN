@@ -13,7 +13,7 @@ Bu bölümde kullanacağımız kütüphaneleri import edildi;
     import numpy as np
     import os
 
-Kullanacağımız Cifar100 verisetini yükleyelim, değişkenlerimize atayalım ve .png uzantılı görüntüleri kaydetmek istediğimiz dosya yollarını belirtelim;
+Kullanacağımız Cifar100 verisetini yükleyelim, değişkenlerimize atayalım ve .png uzantılı görüntüleri kaydetmek istediğimiz dosya yollarını belirtildi;
 
     # load data
     (X_train, y_train), (X_test, y_test) = cifar100.load_data()
@@ -33,7 +33,7 @@ Seçtiğimiz 6 class'ı klasörlere kaydetmek için kullanacağımız fonksiyonu
 
 > "... konumunda dosya vardır kontrol ediniz"
 
- şeklinde uyarı yazısı yazdıralım;
+ şeklinde uyarı yazısı yazdırıldı;
 
     class_name=['/beaver','/boy','/forest','/oak_tree','/snail','/sunflowe']
     class_num=[4, 11, 33, 52, 77, 82]
@@ -60,7 +60,7 @@ Oluşturulan klasörler aşağıdaki gibi olacaktır;
 <img  src="https://i.hizliresim.com/VpKUOF.png"  width="750">
 </p>
 
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/class_file.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/class_file.py)
 
 ## 2- Seçilen sınıfların görselleştirilmesi:
 
@@ -113,7 +113,7 @@ Seçtiğimiz sınıflara ait örnek görüntüler aşağıdaki gibi olacak:
 <img  src="https://i.hizliresim.com/S3Ao0q.png"  width="750">
 </p>
 
-Bu bölümün kodlarını incelemek için [tıklayınız.](hhttps://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/class_show2.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/class_show.py)
 
 ---
 ## 3- Model Oluşturulması ve Eğitilmesi:
@@ -179,11 +179,13 @@ Görüntü boyutunu yarıya indirmek için (2, 2) boyutunda bir MaxPooling2D iş
 
     model.add(layers.MaxPooling2D((2, 2)))
 Beşinci katman olarak hücre sayısı 128 olan bir Conv2D layer’ı oluşturuldu:
-	model.add(layers.Conv2D(138,(3,3),
+
+    model.add(layers.Conv2D(128,(3,3),
                                padding='same',
                                activation='relu'))
 Altıncı katman olarak beşinci katmandaki parametrelerin aynısı kullanılarak Conv2D layer’ı oluşturuldu:
-model.add(layers.Conv2D(138,(3,3),
+
+    model.add(layers.Conv2D(128,(3,3),
                                padding='same',
                                activation='relu'))
 Görüntü matrisimizi dense layer'a uygun hale getirmek, yani matrisi vektör haline dönüştürmek için **Flatten()** işlemi uygulandı:
@@ -194,6 +196,7 @@ Modelimize, 256 hücreli, aktivasyon fonksiyonu olarak relu kullanan bir Dense l
 
     model.add(layers.Dense(256, activation='relu'))
 Modelimize, 256 hücreli, aktivasyon fonksiyonu relu olan bir Dense layer daha eklendi:
+
     model.add(layers.Dense(256, activation='relu'))
 
 Modelimizdeki çıkış katmanı olarak, tahmin edilecek 6 sınıfımız olduğu için, 6 hücreli ve **multi-class classification** problemi çözmeye çalıştığımız için aktivasyon fonksiyonu olarak **softmax** kullanan bir **Dense layer** eklendi:
@@ -234,7 +237,7 @@ Modelimizi okumak için  **flow_from_directory** kullanıldığı için eğitirk
 - Train_generator’den gelen veriler eğitim veri seti olarak kullanıldı.
 - Her epoch’da 150 kez parametreleri güncellemesi için **step_per_epoch=150** olarak belirlendi.
 - odelin verilerimizi 30 defa görmesi için **epoch=30** olarak belirlendi.
-- Validation için **test_generator**'den gelen veriler kullanıldı:ruz.
+- Validation için **test_generator**'den gelen veriler kullanıldı:
 
 Modeli eğitelim;
 
@@ -302,7 +305,7 @@ Modelimiz validation verilerimizde %78.5 başarı elde etti.
 Grafiğimizi incelediğimizde validation ve train loss arasındaki fark git gide arttığı için **overfitting** olduğu sonucuna varıldı.
 Overfitting'i önlemek amacıyla sırasıyla **dropout** ve **data augmentation** yöntemleri uygulandı.
 
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/model-2.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/model.py)
 
 ---
 
@@ -324,13 +327,13 @@ Son Conv2D katmanından sonra, Dense Layer'dan önce ve iki Dense Layer arasınd
 
 Dropout eklendikten sonra model yeniden eğitildi ve eğitim sonucunda oluşan yeni grafikler ve değerler tekrar incelendi:
 <p  align="center">
-<img  src="https://i.hizliresim.com"  width="750">
+<img  src="https://i.hizliresim.com/5HvIqT.png"  width="750">
 </p>
 
 Modelimiz dropout işlemi sonrasında  validation verilerimizde %79.8 başarı elde etti.
 
 <p  align="center">
-<img  src="https://https://i.hizliresim.com"  width="750">
+<img  src="https://i.hizliresim.com/IRiZip.png"  width="750">
 </p>
 
 Grafikte incelediğimiz değerlere göre validation ve train loss’ları arasındaki fark biraz azaldığı için overfitting’e olumlu yönde bir etki ettiği görüldü. Ama daha iyi sonuç vermesi için **data augmentation** uygulandı.
@@ -361,7 +364,7 @@ ImageDataGenerator fonksiyonu ile verilerimize **zoom_range**, **horizontal_flip
 Data augmentation işlemi sonrasında modelimiz yeniden eğitildi:
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/gWuiul.png"  width="750">
+<img  src="https://i.hizliresim.com/qUxePw.png"  width="750">
 </p>
 
 Modelimiz, validation verilerimizde dropout ve data augmentation uygulaması sonrasında  %85.66 başarı elde etti.
