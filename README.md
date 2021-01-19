@@ -40,7 +40,7 @@ Seçtiğimiz 6 class'ı klasörlere kaydetmek için kullanacağımız fonksiyonu
     def class_selection(X_data,y_data,image_dir):
     	for i,num in enumerate(list_num):
             if not os.path.exists(image_dir+list_name[i]):
-                index=np.where(y_data==num) #class_num'daki dataların indexlerini belirlemek
+                index=np.where(y_data==num)#class_num'daki dataların indexlerini belirler
                 subset_x_data=X_data[np.isin(y_data,[num]).flatten()]
                 for a,x in enumerate(subset_x_data):
                     image_path=(image_dir+list_name[i])
