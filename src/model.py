@@ -55,22 +55,33 @@ model.add(layers.Conv2D(64,(3, 3),#(3,3) olarak belirtilen kernel boyutu
 model.add(layers.Conv2D(64,(3,3),#(3,3) olarak belirtilen kernel boyutu
                         padding='same',#kenarlara dolgulama işlemi uygulanicak
                         activation='relu'))#aktivasyon fonksiyonu relu
-
-
 model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Dropout(0.50))
+
+#5.Katman
+model.add(layers.Conv2D(128,(3,3),#(3,3) olarak belirtilen kernel boyutu
+                        padding='same',#kenarlara dolgulama işlemi uygulanicak
+                        activation='relu'))#aktivasyon fonksiyonu relu
+#6.Katman
+model.add(layers.Conv2D(128,(3,3),#(3,3) olarak belirtilen kernel boyutu
+                        padding='same',#kenarlara dolgulama işlemi uygulanicak
+                        activation='relu'))#aktivasyon fonksiyonu relu
+
+
 
 
 
 
 #Dense layer:
 model.add(layers.Flatten())
+model.add(layers.Dropout(0.50))
+model.add(layers.Dense(256, activation='relu'))#aktivasyon fonksiyonu relu
+model.add(layers.Dropout(0.50))
 model.add(layers.Dense(256, activation='relu'))#aktivasyon fonksiyonu relu
 model.add(layers.Dense(6, activation='softmax'))
 
 #modeli compile ettik
 
-model.compile(loss='categorical_crossentropy', optimizer=optimizers.Adamax(lr=5e-4), metrics=['acc'])
+model.compile(loss='categorical_crossentropy', optimizer=optimizers.Adamax(lr=5e-3), metrics=['acc'])
 
 #dizayn edilen modelin içinde kaç tane parametre var onu görmemizi sağlar
 print(model.summary())
@@ -97,7 +108,7 @@ test_generator = datagen.flow_from_directory(test_dir,
                                           class_mode = 'categorical')
 
 history = model.fit_generator(train_generator,
-                              steps_per_epoch=100,                              
+                              steps_per_epoch=150,                              
                               epochs=30,
                               validation_data=test_generator,
                               validation_steps=30) 
