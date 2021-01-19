@@ -60,12 +60,11 @@ Oluşturulan klasörler aşağıdaki gibi olacaktır;
 <img  src="https://i.hizliresim.com/VpKUOF.png"  width="750">
 </p>
 
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/class_selection.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](https://https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/class_file.py)
 
----https://hizliresim.com/VpKUOF
-## 2- Seçilen sınıflara ait örnek verilerin görselleştirilmesi
+## 2- Seçilen sınıfların görselleştirilmesi:
 
-Projenin bu bölümünde, eğitimde kullanacağımız **bee**, **couch**, **girl**, **lawn_mower**, **whale**, **wolf** sınıflarına ait örnek görüntüleri inceleyeceğiz.
+Bu bölümde eğitimde kullanacağımız sınıflara ait görüntüler görselleştirildi.
 
 Bu bölümde kullanacağımız kütüphaneleri import edelim;
 
@@ -73,45 +72,45 @@ Bu bölümde kullanacağımız kütüphaneleri import edelim;
     import numpy as np
     import os
     import matplotlib.pyplot as plt
-`train` ve `test` verilerimizin dosya yollarını belirtelim;
+    
+Train ve test verilerimizin dosya yolları değişkene atandı ve sınıfların isimlerini içeren liste oluşturuldu:
 
-    train_path="data/train"
-    test_path="data/test"
+    train_dir="../train"
+    
 
-6 sınıftan 10'ar örnek veriyi grafik olarak çizmek için `class_show` adında bir fonksiyon oluşturalım. Sınıf isimlerimizi ve numaralarını `list_name` ve `list_num` değişkenlerine atayalım. Sonrasında her sınıf klasöründen alınan 10 adet görüntüyü `np.concatenate` fonksiyonu ile yan yana birleştirelim. Birleştirdiğimiz 6 sınıfa ait görüntüleri alt alta ekranda görüntüleyelim. Satır başına ise o satırdaki görüntülerin ait olduğu sınıf ismini yazdıralım;
+6 sınıftan 10’ar örnek veriyi görselleştirmek için image_show fonksiyonu oluşturuldu. image_show fonksiyonu içinde ilk önce her sınıftan 10 veri okundu ve subplot ile yan yana çizdirildi daha sonra her sınıf için bir alt satıra inildi. Bu şekilde (6,10) bir subplot oluşturuldu. Son olarak her satırın başına sınıf ismi yazdırıldı:
 
     def class_show(train_path):
         concate_list=[]
         
-        list_name=['/bee','/couch','/girl','/lawn_mower','/whale','/wolf']
-        list_num=[6, 25, 35, 41, 95, 97]
+        class_name=['/beaver','/boy','/forest','/oak_tree','/snail','/sunflowe']
     
         for x,name in enumerate(list_name):
             img_list=[]
             img_first=name+"/0.png"
-            img_concate=cv2.imread(train_path+img_first)
+            img_concate=cv2.imread(train_dir+img_first)
+            a=x*10
+            
             for i in range(10):
                 img_name=name+"/"+str(i)+".png"
-                img=cv2.imread(train_path+img_name)
-                img_list.append(img)
-                if i>0:
-                    img_concate=np.concatenate((img_concate,img_list[i]),axis=1)
-            concate_list.append(img_concate)
-            ax3 =plt.subplot(10,1,x+1)
-            ax3.set_yticks([])
-            ax3.set_xticks([])
-            ax3.set_ylabel(name[1:], rotation=0, labelpad=32)
-            plt.imshow(concate_list[x])
-            plt.axis('on')
-        
-        plt.show()
+                img=cv2.imread(train_dir+img_name)
+                ax2=plt.subplot(6,10,i+a
+                if (i+1+a)==c:
+                    ax2.set_ylabel(name[1:],rotation=0,labelpad=25)  
+                    ax2.set_yticks([])
+                    c=c+10
+                else:
+                    ax2.set_yticks([])
+                    ax2.set_xticks([])
+                          
+                plt.imshow(img)
 Yazdığımız `class_show` fonksiyonumuzu `train_path` parametresini girerek çalıştıralım:
 
-    class_show(train_path)
+    image_show(train_dir,list_name) 
 
 Seçtiğimiz sınıflara ait örnek görüntüler aşağıdaki gibi olacak:
 <p  align="center">
-<img  src="https://i.hizliresim.com/uRxXG3.jpg"  width="750">
+<img  src="https://i.hizliresim.com/S3Ao0q.png"  width="750">
 </p>
 
 Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/class_show.py)
