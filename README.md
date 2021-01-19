@@ -113,12 +113,12 @@ Seçtiğimiz sınıflara ait örnek görüntüler aşağıdaki gibi olacak:
 <img  src="https://i.hizliresim.com/S3Ao0q.png"  width="750">
 </p>
 
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/class_show.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](hhttps://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/class_show2.py)
 
 ---
-## 3- Model oluşturulması ve eğitimi
+## 3- Model Oluşturulması ve Eğitilmesi:
 
-Projenin bu bölümünde multi-class clasification problemimiz için bir CNN modeli oluşturacağız ve modeli Google Colab'da eğiteceğiz. Loss ve accuracy değerlerini inceleyeceğiz.
+Bu bölümde **multi-class** classification problemimiz için bir **CNN modeli** oluşturuldu. **Loss** ve **accuracy** değerleri, oluşturulan grafikler ile incelendi.
 
 Bu bölümde kullanacağımız kütüphaneleri import edelim:
 
@@ -137,78 +137,87 @@ Bu bölümde kullanacağımız kütüphaneleri import edelim:
 
 `train` ve `test` verilerimizin dosya yollarını belirleyelim:
 
-    train_dir='data/train'
-    test_dir='data/test'
+    train_dir='../train'
+    test_dir='../test'
 
-Modeli tanımlamakla başlayalım:
+İlk önce model tanımlandı:
 
     model=models.Sequential()
 
-Modelimizin 1. katmanında;
+Modelimizin ilk katmanında;
 - 32 hücreli,
-- (3, 3) boyutunda kernele sahip,
-- kenarlarda padding dolgusu olan,
-- aktivasyon fonksiyonu olarak relu kullanan,
-- ilk katman olduğu için de giriş boyutu (32, 32, 3)
+- (3,3) boyutunda kernel’e sahip,
+- kenarlara dolgulama işlemi uygulanması için **padding=’same’**, 
+- aktivasyon fonksiyonu relu,
+- lk katman olduğu için giriş görüntüsünün boyutu (32,32,3) olacak şekilde parametreler belirlenerek bir Conv2D layer’ı oluşturuldu:
 
-olacak şekilde parametreler belirterek, bir Conv2D layer'ı ekleyelim:
 
     model.add(layers.Conv2D(32,(3,3),
                             padding='same',
                             activation='relu',
                             input_shape=(32,32,3)))
 
-Modelimizin 2. katmanında 1. katman ile aynı parametreler kullanıldı, önceki katmandan gelen verileri kullanacağı için `input_shape` belirtilmedi:
+İkinci katman olarak, aynı parametreleri içeren bir Conv2D layer’ı oluşturuldu. Ancak önceki katmandan farklı olarak, bu bir ara katman olduğu için **input_shape** parametresi belirtilmedi:
 
     model.add(layers.Conv2D(32,(3, 3),
                              padding='same',
                              activation='relu'))
-Görüntü boyutunu yarıya indirmek için (2, 2) boyutunda bir `MaxPooling2D` işlemi uygulayalım:
+Görüntü boyutunu yarıya indirmek için (2, 2) boyutunda bir MaxPooling2D işlemi uygulandı:
 
     model.add(layers.MaxPooling2D((2, 2)))
-Modelimizin 3. katmanında 64 hücreli bir Conv2D layer'ı ekleyelim:
+Üçüncü katman olarak 64 hücreli, padding=’same’ seçilen, aktivasyon fonksiyonu relu olan Conv2D layer’ı oluşturuldu.
 
     model.add(layers.Conv2D(64,(3, 3),
                              padding='same',
                              activation='relu'))
-Modelimizin 4. katmanında 64 hücreli bir Conv2D layer'ı ekleyelim:
+Dördüncü katman olarak üçüncü katmandaki parametrelerin aynısı kullanılarak Conv2D layer’ı oluşturuldu:
 
     model.add(layers.Conv2D(64,(3,3),
                             padding='same',
                             activation='relu'))
-Görüntü boyutunu yarıya indirmek için (2, 2) boyutunda bir `MaxPooling2D` işlemi uygulayalım:
+Görüntü boyutunu yarıya indirmek için (2, 2) boyutunda bir MaxPooling2D işlemi uygulandı:
 
     model.add(layers.MaxPooling2D((2, 2)))
-Görüntü matrisimizi dense layer'a uygun hale getirmek, matrisi vektör haline dönüştürmek için `Flatten()` işlemi uygulayalım:
+Beşinci katman olarak hücre sayısı 128 olan bir Conv2D layer’ı oluşturuldu:
+	model.add(layers.Conv2D(138,(3,3),
+                               padding='same',
+                               activation='relu'))
+Altıncı katman olarak beşinci katmandaki parametrelerin aynısı kullanılarak Conv2D layer’ı oluşturuldu:
+model.add(layers.Conv2D(138,(3,3),
+                               padding='same',
+                               activation='relu'))
+Görüntü matrisimizi dense layer'a uygun hale getirmek, yani matrisi vektör haline dönüştürmek için **Flatten()** işlemi uygulandı:
 
     #Dense layer:
     model.add(layers.Flatten())
-Modelimize, 256 hücreli, aktivasyon fonksiyonu olarak `relu` kullanan bir dense layer ekleyelim:
+Modelimize, 256 hücreli, aktivasyon fonksiyonu olarak relu kullanan bir Dense layer eklendi:
 
     model.add(layers.Dense(256, activation='relu'))
+Modelimize, 256 hücreli, aktivasyon fonksiyonu relu olan bir Dense layer daha eklendi:
+    model.add(layers.Dense(256, activation='relu'))
 
-Modelimizdeki çıkış katmanı olarak, tahmin edilecek 6 sınıfımız olduğu için, 6 hücreli ve multi-class classification problemi çözmeye çalıştığımız için, aktivasyon fonksiyonu olarak `softmax` kullanan bir dense layer ekleyelim:
+Modelimizdeki çıkış katmanı olarak, tahmin edilecek 6 sınıfımız olduğu için, 6 hücreli ve **multi-class classification** problemi çözmeye çalıştığımız için aktivasyon fonksiyonu olarak **softmax** kullanan bir **Dense layer** eklendi:
 
     model.add(layers.Dense(6, activation='softmax'))
-Modeli compile ederken, modelimizin çıkış katmanında `softmax` kullandığımız için loss fonksiyonu olarak `categorical_crossentropy` kullanıyoruz. Optimizer olarak `Adamax` ve learning rate parametresini `5e-4` olarak belirliyoruz. Accuracy değerini incelemek için metrics parametresinde `acc` kullanalım:
+Modeli compile ederken, modelimizin çıkış katmanında softmax kullandığımız için loss fonksiyonu olarak **categorical_crossentropy** kullanıldı. Optimizer olarak **Adamax** ve **learning rate** parametresini **5e-3** olarak belirlendi. Accuracy değerini incelemek için metrics parametresinde acc kullanıldı:
 
     model.compile(loss='categorical_crossentropy', 
-                  optimizer=optimizers.Adamax(lr=5e-4), 
+                  optimizer=optimizers.Adamax(lr=5e-3), 
                   metrics=['acc'])
-Oluşturduğumuz modeldeki katmanları ve parametreleri gözlemleyelim:
+Dizayn edilen modeli incelemek için **model.summary()** fonksiyonu kullanıldı:
 
     print(model.summary())
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/1sXeqV.jpg"  width="750">
+<img  src="https://i.hizliresim.com/JnYKw6.png"  width="750">
 </p>
 
-Verilerimizi okurken değerleri 0-1 aralığında normalize etmek için `ImageDataGenerator` fonksiyonunda `rescale` parametresini kullanalım:
+Verilerimizi okurken pikselleri 0-1 aralığında normalize etmek için ImageDataGenerator fonksiyonunda rescale parametresine 1./255 değeri verildi:
 
     train_datagen=ImageDataGenerator(rescale=1./255)
     test_datagen= ImageDataGenerator(rescale=1./255)
 
-Train ve Test verilerimizi dosyalardan okumak için `flow_from_directory` fonksiyonunu kullanalım. Bu fonksiyon, dosya yolundaki klasörlerden classları tespit eder ve labelları oluşturur. Verilerin tümünü birden yüklememek için `batch_size=20`, görüntülerimizin giriş boyutunu ise `(32, 32)` olarak belirleyelim:
+Train ve test verilerimizi dosyalardan okumak için **flow_from_directory** fonksiyonunu kullanıldı. Bu fonksiyon, dosya yolundaki klasörlerden classları tespit eder ve labelları oluşturur. **Batch_size=20** parametresi ile de verileri 20’şer 20’şer okur. Görüntülerimizin giriş boyutu ise (32, 32) olarak belirlendi:
 
     train_generator = datagen_aug.flow_from_directory(train_dir,
                                               target_size = (32,32),
@@ -221,11 +230,11 @@ Train ve Test verilerimizi dosyalardan okumak için `flow_from_directory` fonksi
                                               class_mode = 'categorical')
 
 
-Modelimizi eğitmek için `fit_generator` kullanıyoruz.
-- Eğitim verileri olarak `train_generator`'den gelen verileri kullanıyoruz.
-- Her epoch'da 150 kez parametreleri güncellemek için 		 `steps_per_epoch=150` olarak belirliyoruz.
-- Verilerimizin 30 defa modeli dolaşması için `epoch=30` olarak belirliyoruz.
-- Validation için `test_generator`'den gelen verileri kullanıyoruz.
+Modelimizi okumak için  **flow_from_directory** kullanıldığı için eğitirken de **fit_generator** kullanıldı.
+- Train_generator’den gelen veriler eğitim veri seti olarak kullanıldı.
+- Her epoch’da 150 kez parametreleri güncellemesi için **step_per_epoch=150** olarak belirlendi.
+- odelin verilerimizi 30 defa görmesi için **epoch=30** olarak belirlendi.
+- Validation için **test_generator**'den gelen veriler kullanıldı:ruz.
 
 Modeli eğitelim;
 
@@ -237,14 +246,14 @@ Modeli eğitelim;
                                   validation_steps=30) 
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/F23SGm.jpg"  width="750">
+<img  src="https://i.hizliresim.com/XFl7T3.png"  width="750">
 </p>
 
-Eğitilen modeli .h5 uzantılı dosyaya kaydedelim:
+Eğitilmiş modelimiz cifar100.h5 dosyasına kaydedildi:
 
-    model.save('cifar100-son/model/best_model_end.h5')
+    model.save('cifar100.h5')
 
-Eğittiğimiz modelimizin sonuçlarını gözlemlemek için *Training and Validation Accuracy* ve *Training and Validation Loss* grafiklerini çizdirelim:
+Eğittiğimiz modelimizin sonuçlarını gözlemlemek için **Training and Validation Accuracy** ve **Training and Validation Loss** grafikleri çizdirildi: 
 
     def plot_acc_loss(x):  
       acc = x.history["acc"]
@@ -260,87 +269,79 @@ Eğittiğimiz modelimizin sonuçlarını gözlemlemek için *Training and Valida
       plt.subplot(2,1,1)
       plt.plot(epochs, acc, "bo", label="Training acc")
       plt.plot(epochs, val_acc, "b", label="Validation acc")
-      plt.xlabel("Epochs")
-      plt.ylabel("Accuracy")
+      plt.xlabel("Epoch")
+      plt.ylabel("Acc")
       plt.title("Training and Validation Accuracy")
     
       plt.subplot(2,1,2)
       plt.plot(epochs, loss, "bo", label="Training loss")
       plt.plot(epochs, val_loss, "b", label="Validation loss")
       plt.title("Training and Validation Loss")
-      plt.xlabel("Epochs")
+      plt.xlabel("Epoch")
       plt.ylabel("Loss")
       plt.legend()
       fig.tight_layout()
       plt.show()
-      fig.savefig("cifar100-son/graph.png")
+
       
     
     plot_acc_loss(history)
 
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/jb3XPT.jpg"  width="750">
+<img  src="https://i.hizliresim.com/wAd9Yj.png"  width="750">
 </p>
 
-Modelimiz test verilerimizde **`%82.8`** başarı elde etti.
+Modelimiz validation verilerimizde %78.5 başarı elde etti.
 
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/0UnOSG.png"  width="750">
+<img  src="https://i.hizliresim.com/7VDYcc.png"  width="750">
 </p>
 
-Grafikte incelediğimiz değerlere göre modelimizin **overfitting** olduğu sonucuna varıyoruz.
+Grafiğimizi incelediğimizde validation ve train loss arasındaki fark git gide arttığı için **overfitting** olduğu sonucuna varıldı.
+Overfitting'i önlemek amacıyla sırasıyla **dropout** ve **data augmentation** yöntemleri uygulandı.
 
-Overfitting'i önlemek amacıyla sırasıyla `dropout` ve `data augmentation` yöntemlerini uygulayacağız.
-
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/best_model.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/model-2.py)
 
 ---
 
 ## 4- Dropout
 
-**`Dropout`**, eğitim sırasında parametre olarak verilen oranda, bağlantıları koparır. Overfitting'i önlemek için kullanılır.
+**Dropout**, eğitim sırasında parametre olarak verilen oranda bağlantıları koparır. Overfitting'i önlemek için kullanılır.
+Son Conv2D katmanından sonra, Dense Layer'dan önce ve iki Dense Layer arasında bağların yarısını koparmak için dropout eklendi.
 
-Son Conv2D katmanından sonra, Dense Layer'dan önce bağların yarısını koparmak için `dropout` ekleyelim:
-
-    model.add(layers.Conv2D(64,(3,3),
-                            padding='same',
-                            activation='relu'))
-    
-    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Flatten())
     
     model.add(layers.Dropout(0.5)) <-------------- Dropout
     
     #Dense layer:
-    model.add(layers.Flatten())
-    
     model.add(layers.Dense(256, activation='relu'))
+    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(256, activation='relu'))
+    model.add(layers.Dense(6, activation='softmax'))
+    
 
-`Dropout` eklendikten sonra modeli yeniden eğitelim, eğitim sonucunda oluşan yeni grafikleri ve değerleri tekrar inceleyelim:
+Dropout eklendikten sonra model yeniden eğitildi ve eğitim sonucunda oluşan yeni grafikler ve değerler tekrar incelendi:
 <p  align="center">
-<img  src="https://i.hizliresim.com/KRveeO.jpg"  width="750">
+<img  src="https://i.hizliresim.com"  width="750">
 </p>
 
-Modelimiz `dropout` işlemi sonrasında test verilerimizde **`%83.8`** başarı elde etti. `Dropout` uygulamadan önce başarı oranı **`%82.8`** idi.
+Modelimiz dropout işlemi sonrasında  validation verilerimizde %79.8 başarı elde etti.
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/leHvCc.png"  width="750">
+<img  src="https://https://i.hizliresim.com"  width="750">
 </p>
 
-Grafikte incelediğimiz değerlere göre modelimizin **overfitting** durumunda az da olsa iyileşme görüyoruz. Ancak hala modelimiz çok iyi durumda değil.
+Grafikte incelediğimiz değerlere göre validation ve train loss’ları arasındaki fark biraz azaldığı için overfitting’e olumlu yönde bir etki ettiği görüldü. Ama daha iyi sonuç vermesi için **data augmentation** uygulandı.
 
-Bu durumu daha da iyileştirmek için **data augmentation** uygulayacağız.
-
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/best_model.py)
 
 ---
 ## 5- Data Augmentation
 
-**Data augmentation** yöntemi ile **train** verilerimizi çeşitlendirip modelimizi iyileştirmeyi hedefliyoruz.
+Modelin iyi bir şekilde öğrenebilmesi için yeterli verimizin olması gerekmektedir. Yeteri kadar verimiz yoksa veri artırma yöntemlerine başvurmalıyız. **Data augmentation** yöntemi ile train verilerimizi çeşitlendirip modelimizin daha iyi öğrenmesi sağlandı. 
 
-`ImageDataGenerator` fonksiyonu ile verilerimize `zoom_range`, `horizontal_flip` ve `rescale` işlemlerini uygulayacak generator'u yazıyoruz:
-
+ImageDataGenerator fonksiyonu ile verilerimize **zoom_range**, **horizontal_flip** ve **rescale** işlemleri uygulandı:
     datagen = ImageDataGenerator(
                   zoom_range=0.2,
                   horizontal_flip=True,
@@ -357,29 +358,27 @@ Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/re
                                               batch_size = 20,
                                               class_mode = 'categorical')
 
-Data augmentation işlemi sonrasında modelimizi yeniden eğitiyoruz.
+Data augmentation işlemi sonrasında modelimiz yeniden eğitildi:
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/jM8yPN.jpg"  width="750">
+<img  src="https://i.hizliresim.com/gWuiul.png"  width="750">
 </p>
 
-Modelimiz augmentation ve dropout işlemleri sonrasında **test** verilerimizde **`%84.8`** başarı elde etti. Bu işlemleri uygulamadan önce başarı oranı **`%82.8`** idi.
+Modelimiz, validation verilerimizde dropout ve data augmentation uygulaması sonrasında  %85.66 başarı elde etti.
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/3Pp6Ts.png"  width="750">
+<img  src="https://i.hizliresim.com/S3ol6N.png"  width="750">
 </p>
 
-Grafikte incelediğimiz değerlere göre modelimizde **data augmentation** ve **dropout** işlemleri uygulamadan önceki haline göre iyileşme olduğunu görüyoruz. Validation ve Train değerleri birbirine yaklaştığı için **overfitting oluşmadığı sonucuna varıyoruz.**
-
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/best_model.py)
+Grafikte incelediğimiz değerlere göre modelimizde data augmentation ve dropout işlemleri uygulandıktan sonra train ve validation loss arasındaki farkın neredeyse kapandığını gördük. Overfitting için yapmış olduğumuz bu adımlar modeli iyileştirmemize yardımcı olmuştur.
 
 ---
 
-## 6- Eğittiğimiz model ile test verilerinde predict işlemi
+## 6- est verilerinde predict işlemi:
 
-Projenin bu bölümünde, eğittiğimiz modeli test verilerimizdeki her sınıftan bir örnek ile test edeceğiz.
+Bu bölümde, eğittiğimiz model test verilerimizden her sınıftan bir örnek ile test edildi.
 
-Bu bölümde kullanacağımız kütüphaneleri import edelim:
+Kullanacağımız kütüphaneler import edildi:
 
     from keras.preprocessing import image
     from keras import models 
@@ -388,43 +387,40 @@ Bu bölümde kullanacağımız kütüphaneleri import edelim:
     import cv2 
     import os
 
-Sınıflarımızın isimlerini içeren `list_name` listesini, eğittiğimiz son model olan `best_model_end.h5` dosyasını ve test verilerimizi değişkenlere atayalım:
+Sınıflarımızın isimlerini içeren list_name listesi, eğittiğimiz son model olan cifar100.h5 dosyası ve test verilerimiz değişkenlere atandı:
 
-    list_name=['/bee','/couch','/girl','/lawn_mower','/whale','/wolf']
-    model=models.load_model('src/models/best_model_end.h5')
-    test_path='data/test'
+    list_name=['/beaver','/boy','/forest','/oak_tree','/snail','/sunflower']
+    model=models.load_model('cifar100.h5')
+    test_dir='/mnt/sdb2/ders/deep_learning_bsm/DeepLearning/Cifar100/test'
 
-Her sınıftaki 100 adet test verisi arasından rastgele birer data seçip, seçtiğimiz datanın olması gereken sınıfı ile modelimizin tahmin ettiği sınıfı karşılaştıralım:
+Her sınıf için test verileri arasından np.random.randint fonksiyonu ile rastgele birer görüntü seçip, seçtiğimiz görüntüyü eğitilmiş modele vererek tahmin edilen ve olması gereken sınıf görselleştirildi:
 
     for x,name in enumerate(list_name):
         predict_list=[]
         random=np.random.randint(1,100)
         path=(test_path+name+'/'+str(random)+".png")
-        Data1=image.load_img(path, target_size=(32,32))
-    
-        Data=image.img_to_array(Data1)
-        
+        Giris1=image.load_img(path, target_size=(32,32))
+        #numpy dizisine dönüştür
+        Giris=image.img_to_array(Giris1)
+        #görüntüyü ağa uygula
         y=model.predict(Data.reshape(1,32,32,3))
+        #En yüksek tahmin sınıfını bul
+        tahmin_indeks=np.argmax(y)
         
-        predict_ind=np.argmax(y)
-        
-        ax3 = plt.subplot(6,1,x+1)
+        ax3 = plt.subplot(6,6,x+1)
         ax3.set_yticks([])
         ax3.set_xticks([])
     
-        ax3.set_ylabel('Olmasi Gereken:{0}\nTahmin:{1}'.format(list_name[x][1:],
-                                                        list_name[predict_ind][1:]),
-                                                        rotation=0,
-                                                        labelpad=75)
-        plt.imshow(Data1)
+        ax3.set_xlabel('label:{0}\npred:{1}'.format(list_name[x][1:],list_name[tahmin_indeks[1:]))
+        plt.imshow(Giris1)
     
     plt.show()
 
 
 <p  align="center">
-<img  src="https://i.hizliresim.com/gUNjQs.png"  width="500">
+<img  src="https://i.hizliresim.com/wyo81x.png"  width="500">
 </p>
 
-Yukarıdaki görselde göreceğimiz üzere bee, girl, lawn_mower, wolf sınıflarımız doğru tahmin edildi, couch ve whale sınıflarımız doğru tahmin edilemedi. **Modelimiz 6 sınıftan 4 tanesini doğru tahmin etti.** Test sonuçlarımızda da **`%84.5`** doğruluk sonucuna ulaşmıştık.
+Modelimiz 6 sınıf içerisinden 4 tanesini doğru tahmin etmiştir. Veri seti incelendiğinde bazı verilerin çok net olmadığı ve anlaşılmadığı gözlemlendi. Bu yüzden belli bir başarı yüzdesinin üzerine çıkmak için farklı sınıflar ile eğitildiğinde daha iyi sonuçlar verdiği tespit edildi.
 
-Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/test.py)
+Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/aycabingul/MultiClass-Classification_CNN/blob/main/src/test.py)
