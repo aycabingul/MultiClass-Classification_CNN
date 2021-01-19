@@ -57,7 +57,7 @@ Seçtiğimiz 6 class'ı klasörlere kaydetmek için kullanacağımız fonksiyonu
 Oluşturulan klasörler aşağıdaki gibi olacaktır;
 
 <p  align="center">
-<img  src="https://hizliresim.com/VpKUOF"  width="750">
+<img  src="https://i.hizliresim.com/VpKUOF.png"  width="750">
 </p>
 
 Bu bölümün kodlarını incelemek için [tıklayınız.](https://github.com/recepayddogdu/MultiClass-Classification_CNN/blob/main/src/class_selection.py)
